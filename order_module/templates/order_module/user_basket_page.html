@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load thumbnail %}
+{% load poll_extras %}
+
+
+{% block title %}
+    سبد خرید
+{% endblock %}
+
+
+{% block body %}
+
+
+    <div id="order_items">
+    {% if orders %}
+    	<section id="cart_items">
+        <div class="container">
+            <div class="breadcrumbs">
+                <ol class="breadcrumb">
+                    <li><a href="#">خانـه</a></li>
+                    <li class="active">پرداخت</li>
+                </ol>
+            </div><!--/breadcrums-->
+            <div class="table-responsive cart_info">
+                <table class="table table-condensed">
+                    <thead>
+                    <tr class="cart_menu">
+                        <td class="image">کـالا</td>
+                        <td class="description"></td>
+                        <td class="price">قیمت</td>
+                        <td class="quantity">تعـداد</td>
+                        <td class="total">مجمـوع</td>
+                        <td></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for order in orders %}
+                    	<tr>
+                        <td class="cart_product">
+                            {% thumbnail order.product.image '110x110' crop='center' as im %}
+                                <a href="{{ order.product.detail_url }}"><img src="{{ im.url }}"></a>
+                            {% endthumbnail %}
+
+                        </td>
+                        <td class="cart_description">
+                            <h4><a href="">{{ order.product.title}}</a></h4>
+                        </td>
+                        <td class="cart_price">
+                            <p>{{ order.product.price|three_digital_currency }}</p>
+                        </td>
+                        <td class="cart_quantity">
+                            <div class="cart_quantity_button">
+                                <a class="cart_quantity_up" id="cursor_pointer" onclick="ChangeCount({{ order.product.id }},'increase')"> + </a>
+                                <input class="cart_quantity_input" type="text" name="quantity" value="{{ order.count }}"
+                                       autocomplete="off" size="2">
+                                <a class="cart_quantity_down" id="cursor_pointer" onclick="ChangeCount({{ order.product.id }},'decrease')"> - </a>
+                            </div>
+                        </td>
+                        <td class="cart_total">
+                            <p class="cart_total_price">{{ order.finally_price|three_digital_currency}}</p>
+                        </td>
+                        <td class="cart_delete">
+                            <a class="cart_quantity_delete" id="cursor_pointer" onclick="DeleteOrder({{ order.product.id }})"><i class="fa fa-times"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section> <!--/#cart_items-->
+
+    <section id="do_action">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="total_area">
+                        <ul>
+                            <li>مجمـوع <span>{{ order_price|three_digital_currency }}</span></li>
+                        </ul>
+                        <a class="btn btn-default check_out" href="checkout.html">پرداخت</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section><!--/#do_action-->
+        {% else %}
+        <h3 class="alert alert-danger" id="alert_order">سبد خرید شما خالی است برای اضافه کردن به <a href="{% url 'product_list_page' %}">محصولات</a> بروید</h3>
+    {% endif %}
+    </div>
+
+{% endblock %}

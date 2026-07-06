@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}
+    ورود
+{% endblock %}
+
+
+{% block body %}
+
+    {% if request.user.is_authenticated %}
+        <h4 id="alert_order" class="alert alert-danger">شما قبلا به سایت ما ورود کرده اید</h4>
+    {% else %}
+        <div class="container">
+            <section id="form"><!--form-->
+                <div class="row">
+                    <div id="form_settings" class="col-sm-8 col-sm-offset-1">
+                        <div class="login-form"><!--login form-->
+                            <h2 class="text-center">ورود به حساب کاربـری :</h2>
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                {% render_field form.login class='form-control' %}
+                                {{ form.login.errors }}
+                                {% render_field form.password class='form-control' %}
+                                {{ form.password.errors }}
+                                {{ form.non_field_errors }}
+                                <span>
+								<a class="pull-right"
+                                   href="{% url 'account_reset_password' %}">رمـز عبـور خود را فراموش کرده ام</a>
+							</span>
+                                <button type="submit" class="btn btn-default">ورود</button>
+                            </form>
+                        </div><!--/login form-->
+                    </div>
+                </div>
+            </section>
+        </div>
+    {% endif %}
+{% endblock %}

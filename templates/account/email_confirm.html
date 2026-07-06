@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+    تأیید ایمیل
+{% endblock %}
+
+
+{% block body %}
+
+    <div class="custom-auth-card">
+
+    {% if confirmation %}
+
+        <h2>تأیید آدرس ایمیل</h2>
+
+        <p>
+            آدرس ایمیل شما آماده تأیید است.
+        </p>
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            <button type="submit" class="custom-auth-btn">
+                تأیید ایمیل
+            </button>
+
+        </form>
+
+    {% else %}
+
+        <div class="custom-auth-alert">
+
+            <h4>لینک نامعتبر</h4>
+
+            <p>
+                این لینک منقضی شده است یا اعتبار ندارد.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

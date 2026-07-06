@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}
+    ثبت نام
+{% endblock %}
+
+
+{% block body %}
+
+    {% if request.user.is_authenticated %}
+        <h4 id="alert_order" class="alert alert-danger">شما قبلا به سایت ما ورود کرده اید نمی توانید ثبت نام کنید</h4>
+    {% else %}
+        <div class="container">
+            <section id="form"><!--form-->
+                <div class="row">
+                    <div class="col-sm-8" id="form_settings">
+                        <div class="signup-form"><!--sign up form-->
+                            <h2 class="text-center">ثبت نام کاربـر جدیـد</h2>
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                {{ form.username.help_text }}
+                                {% render_field form.username class='form-control' %}
+                                {{ form.username.errors }}
+                                {% render_field form.email class='form-control' %}
+                                {{ form.email.errors }}
+                                {% render_field form.password1 class='form-control' %}
+                                {{ form.password1.errors }}
+                                {% render_field form.password2 class='form-control' %}
+                                {{ form.password2.errors }}
+                                <button type="submit" class="btn btn-default">ثبت نام</button>
+                            </form>
+                        </div><!--/sign up form-->
+                    </div>
+                </div>
+            </section>
+        </div>
+    {% endif %}
+
+{% endblock %}

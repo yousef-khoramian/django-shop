@@ -1,0 +1,68 @@
+#else_product{
+    text-align: center;
+    margin-top: 100px;
+}
+
+#form_settings{
+    margin-left: 150px;
+}
+
+.errorlist{
+    color: red;
+}
+
+#border_avatar{
+    border-radius: 50%;
+    width: 100px;
+}
+
+#alert_order{
+    margin-top: 200px;
+    margin-bottom: 200px;
+    text-align: center;
+    width: 70%;
+    margin-right: 220px;
+}
+
+#cursor_pointer{
+    cursor: pointer;
+}
+
+#form_contact_us{
+    margin-top: 50px;
+    margin-left: 100px;
+}
+
+#submit{
+    margin-bottom: 50px;
+}
+
+#margin_form{
+    margin-top: 50px;
+    margin-left: 150px;
+}
+
+#margin_form_2{
+    margin-top: 50px;
+    margin-left: 150px;
+    margin-bottom: 100px;
+}
+
+#image_size{
+    width: 150px;
+    margin-right: 100px;
+    margin-bottom: 10px;
+    border-radius: 50%;
+}
+
+#button_filter{
+    width: 100%;
+}
+
+#sing_out{
+    margin-bottom: 33px;
+}
+
+.margin_top{
+    margin-top:80px;
+}

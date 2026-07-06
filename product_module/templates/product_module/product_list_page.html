@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load thumbnail %}
+{% load poll_extras %}
+
+
+{% block title %}
+    محصولات
+{% endblock %}
+
+
+{% block body %}
+
+    <section>
+        <div class="container">
+            <div class="row">
+
+                <div class="col-sm-9 padding-right">
+                    {% if object_list %}
+                        <div class="features_items"><!--features_items-->
+                            <h2 class="title text-center">تمامی محصولات</h2>
+                            {% for product in object_list %}
+                                <a href="{{ product.detail_url }}">
+                                    <div class="col-sm-4">
+                                        <div class="product-image-wrapper">
+                                            <div class="single-products">
+                                                <div class="productinfo text-center">
+                                                    {% thumbnail product.image "300x300" crop="center" as im %}
+                                                        <img src="{{ im.url }}">
+                                                    {% endthumbnail %}
+                                                    <h2>{{ product.price|three_digital_currency }}</h2>
+                                                    <p>{{ product.title }}</p>
+                                                    {% if request.user.is_authenticated %}
+                                                        <a onclick="AddToOrder({{ product.id }},'list')"
+                                                       class="btn btn-default add-to-cart"><i
+                                                            class="fa fa-shopping-cart"></i>افزودن به سبـد خریـد</a>
+                                                    {% endif %}
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            {% endfor %}
+
+
+                            <ul class="pagination">
+                                {% if page_obj.has_previous %}
+                                    <li><a class="fa fa-angle-double-left"
+                                           id="cursor_pointer"
+                                           onclick="FillPage({{ page_obj.previous_page_number }})"></a></li>
+                                {% endif %}
+                                {% for page_number in custom_range %}
+                                    <li {% if page_obj.number == page_number %}class="active"{% endif %}><a
+                                            id="cursor_pointer"
+                                            onclick="FillPage({{ page_number }})">{{ page_number }}</a></li>
+                                {% endfor %}
+
+                                {% if page_obj.has_next %}
+                                    <li><a class="fa fa-angle-double-right" id="cursor_pointer"
+                                           onclick="FillPage({{ page_obj.next_page_number }})"></a></li>
+                                {% endif %}
+                            </ul>
+                        </div><!--features_items-->
+                    {% else %}
+                        <h3 id="else_product" class="alert alert-warning">محصولی یافت نشد</h3>
+                    {% endif %}
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="left-sidebar">
+
+                        <div class="brands_products"><!--brands_products-->
+                            <h2>برنـد ها</h2>
+                            <div class="brands-name">
+                                <ul class="nav nav-pills nav-stacked">
+                                    <li><a href="{% url 'product_list_page' %}">تمامی محصولات</a></li>
+                                    {% for brand in brands %}
+                                        {% if brand.product_set.all|check_active != 0 %}
+                                            <li><a href="/product/brand/{{ brand.url_title }}"> <span
+                                                    class="pull-left">({{ brand.product_set.all|check_active }})</span>{{ brand.title }}
+                                            </a></li>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                </ul>
+                            </div>
+                        </div><!--/brands_products-->
+
+                        <div class="price-range"><!--price-range-->
+                            <h2>فیلتـر قیمـت</h2>
+                            <div class="well" id="margin_filter">
+                                <input
+                                        type="text"
+                                        class="span2"
+                                        value="{{ start_price }},{{ end_price }}"
+                                        data-slider-min="{{ min_price }}"
+                                        data-slider-max="{{ max_price }}"
+                                        data-slider-step="1000000"
+                                        data-slider-value="[{{ start_price }},{{ end_price }}]"
+                                        id="sl2"
+                                ><br/>
+                                <b>{{ max_price|three_digital_currency }}</b> <b
+                                    class="pull-left">{{ min_price|three_digital_currency }}</b>
+                            </div>
+                            <button id="button_filter" onclick="PriceFilter()" class="btn btn-success">اعمال</button>
+                            <form action="" method="get" id="filter_form">
+                                <input type="hidden" name="page" id="page" value="1">
+                                <input type="hidden" name="start_price" id="start_price" value="{{ start_price }}">
+                                <input type="hidden" name="end_price" id="end_price" value="{{ end_price }}">
+                            </form>
+                        </div><!--/price-range-->
+
+
+                        <div class="shipping text-center"><!--shipping-->
+                            <img src="{% static 'images/home/shipping.jpg' %}" alt=""/>
+                        </div><!--/shipping-->
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

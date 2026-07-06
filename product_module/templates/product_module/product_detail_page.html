@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load thumbnail %}
+{% load poll_extras %}
+
+
+{% block title %}
+    جزئیات محصول
+{% endblock %}
+
+
+{% block body %}
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-9 padding-right">
+                    <div class="product-details"><!--product-details-->
+                        <div class="col-sm-5">
+                            <div class="view-product">
+                                {% thumbnail object.image '300x300' crop='center' as im %}
+                                    <img id="original_photo" src="{{ im.url }}">
+                                {% endthumbnail %}
+                                <a id="large_image" href="{{ object.image.url }}" data-lightbox="product-image">
+                                    <h3>بزرگنمایـی</h3>
+                                </a>
+                            </div>
+                            <div id="similar-product" class="carousel slide" data-ride="carousel">
+
+                                <!-- Wrapper for slides -->
+
+                                {% if product_images %}
+                                    <div class="carousel-inner">
+                                        {% for product_image in product_images %}
+                                            <div class="item {% if forloop.first %}active{% endif %}">
+                                                {% for product in product_image %}
+                                                    <a href="{{ product.image.url }}" data-lightbox="product-image"></a>
+                                                    {% thumbnail product.image '85x85' crop='center' as im %}
+                                                        <img onclick="ProductImages('{{ product.image.url }}')"
+                                                             id="cursor_pointer" src="{{ im.url }}">
+                                                    {% endthumbnail %}
+                                                {% endfor %}
+
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <div class="carousel-inner">
+                                        <div class="item active">
+                                            <a href=""><img src="{% static 'images/product-details/similar1.jpg' %}"
+                                                            alt=""></a>
+                                            <a href=""><img src="{% static 'images/product-details/similar2.jpg' %}"
+                                                            alt=""></a>
+                                            <a href=""><img src="{% static 'images/product-details/similar3.jpg' %}"
+                                                            alt=""></a>
+                                        </div>
+                                        <div class="item">
+                                            <a href=""><img src="{% static 'images/product-details/similar1.jpg' %}"
+                                                            alt=""></a>
+                                            <a href=""><img src="{% static 'images/product-details/similar2.jpg' %}"
+                                                            alt=""></a>
+                                            <a href=""><img src="{% static 'images/product-details/similar3.jpg' %}"
+                                                            alt=""></a>
+                                        </div>
+                                        <div class="item">
+                                            <a href=""><img src="{% static 'images/product-details/similar1.jpg' %}"
+                                                            alt=""></a>
+                                            <a href=""><img src="{% static 'images/product-details/similar2.jpg' %}"
+                                                            alt=""></a>
+                                            <a href=""><img src="{% static 'images/product-details/similar3.jpg' %}"
+                                                            alt=""></a>
+                                        </div>
+
+                                    </div>
+                                {% endif %}
+
+                                <!-- Controls -->
+                                <a class="right item-control" href="#similar-product" data-slide="next">
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
+                                <a class="left item-control" href="#similar-product" data-slide="prev">
+                                    <i class="fa fa-angle-left"></i>
+                                </a>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="product-information"><!--/product-information-->
+                                <div>
+                                    <h2>{{ object.title }}</h2>
+                                </div>
+                                <div>
+									<span>
+										<span>{{ object.price|three_digital_currency }}</span>
+									</span>
+                                    <span>
+										<label>تعداد :</label>
+										<input type="number" id="product_count" min="1" max="10" value="1"
+                                               class="search_box"/>
+                                        {% if request.user.is_authenticated %}
+                                            <button onclick="AddToOrder({{ object.id }},'detail')" type="button"
+                                                    class="btn btn-fefault cart">
+											<i class="fa fa-shopping-cart"></i>
+											افـزودن به سبـد خریـد
+										</button>
+                                        {% else %}
+                                            <h4 class="alert alert-danger">برای افزودن محصول به سبد خرید می بایست <a
+                                                    href="{% url 'account_login' %}">ورود</a>کنید</h4>
+                                        {% endif %}
+									</span>
+                                </div>
+                                <div>
+                                    <p><b>برنـد :</b> {{ object.brand.title }} </p>
+                                </div>
+
+                            </div><!--/product-information-->
+                        </div>
+                    </div><!--/product-details-->
+
+
+                    <div class="recommended_items"><!--recommended_items-->
+                        <h2 class="title text-center">محصولات مرتبط</h2>
+
+                        <div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                {% for list in related_product %}
+                                    <div class="item {% if forloop.first %}active{% endif %}">
+                                        {% for product in list %}
+                                            <a href="{{ product.detail_url }}">
+                                                <div class="col-sm-4">
+                                                    <div class="product-image-wrapper">
+                                                        <div class="single-products">
+                                                            <div class="productinfo text-center">
+                                                                {% thumbnail product.image '300x300' crop='center' as im %}
+                                                                    <img src="{{ im.url }}">
+                                                                {% endthumbnail %}
+                                                                <h2>{{ product.price|three_digital_currency }}</h2>
+                                                                <p>{{ product.title }}</p>
+                                                                {% if request.user.is_authenticated %}
+                                                                    <button type="button"
+                                                                            class="btn btn-default add-to-cart"><i
+                                                                            class="fa fa-shopping-cart"></i>افزودن به
+                                                                        سبـد
+                                                                        خریـد
+                                                                    </button>
+                                                                {% endif %}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        {% endfor %}
+
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+                            <a class="left recommended-item-control" href="#recommended-item-carousel"
+                               data-slide="prev">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a class="right recommended-item-control" href="#recommended-item-carousel"
+                               data-slide="next">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </div>
+                    </div><!--/recommended_items-->
+
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="left-sidebar">
+
+                        <div class="brands_products"><!--brands_products-->
+                            <h2>برنـد ها</h2>
+                            <div class="brands-name">
+                                <ul class="nav nav-pills nav-stacked">
+                                    <li><a href="{% url 'product_list_page' %}">تمامی محصولات</a></li>
+                                    {% for brand in brands %}
+                                        {% if brand.product_set.all|check_active != 0 %}
+                                            <li><a href="/product/brand/{{ brand.url_title }}"> <span
+                                                    class="pull-left">({{ brand.product_set.all|check_active }})</span>{{ brand.title }}
+                                            </a></li>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                </ul>
+                            </div>
+                        </div><!--/brands_products-->
+
+
+                        <div class="shipping text-center"><!--shipping-->
+                            <img src="{% static 'images/home/shipping.jpg' %}" alt=""/>
+                        </div><!--/shipping-->
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

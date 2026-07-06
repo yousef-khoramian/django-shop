@@ -1,0 +1,208 @@
+{% load static %}
+{% load poll_extras %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>{% block title %}{% endblock %}</title>
+    {% include 'include/css_refrences.html' %}
+
+</head><!--/head-->
+
+<body>
+<header id="header"><!--header-->
+    <div class="header_top"><!--header_top-->
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="contactinfo">
+                        <ul class="nav nav-pills">
+                            <li><a href="#"><i class="fa fa-phone"></i> 80 21 24 36 98+ </a></li>
+                            <li><a href="#"><i class="fa fa-envelope"></i> info@domain.com</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="social-icons pull-right">
+                        <ul class="nav navbar-nav">
+                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                            <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+                            <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!--/header_top-->
+
+    <div class="header-middle"><!--header-middle-->
+        <div class="container">
+            <div class="row">
+                <!-- <div class="col-sm-4 header-middle-menu">
+                    <div class="shop-menu pull-left">
+                        <ul class="nav navbar-nav">
+                            <li><a href="checkout.html"><i class="fa fa-crosshairs"></i> پرداخت</a></li>
+                        </ul>
+                    </div>
+                </div> -->
+
+                <div class="col-sm-4" style="text-align: left;">
+                    <div class="logo">
+                        <a href="{% url 'home_page' %}"><img src="{% static 'images/home/logo.png' %}" alt="Logo"
+                                                             style="text-align: center;"/></a>
+                    </div>
+                </div>
+
+                <div class="col-sm-8 header-middle-menu">
+                    <div class="shop-menu pull-right">
+                        <ul class="nav navbar-nav">
+                            {% if not request.user.is_authenticated %}
+                                <li><a {% active_url 'account_signup' 'account_confirm_email' 'account_email_verification_sent' %} href="{% url 'account_signup' %}"><i class="fa fa-lock"></i> ثبت نام</a></li>
+                                <li><a {% active_url 'account_login' 'account_reset_password' 'account_reset_password_done' 'account_reset_password_from_key' 'account_reset_password_from_key_done' %} href="{% url 'account_login' %}"><i class="fa fa-lock"></i> ورود</a></li>
+                            {% else %}
+                                <li><a {% active_url 'account_logout' %} href="{% url 'account_logout' %}"><i class="fa fa-sign-out"></i>خروچ</a></li>
+                                <li><a {% active_url 'user_panel_page' 'edit_profile_page' 'edit_password_page' %} href="{% url 'user_panel_page' %}"><i class="fa fa-user"></i> حساب کاربـری</a></li>
+                                <li><a {% active_url 'user_basket_page' %} href="{% url 'user_basket_page' %}"><i class="fa fa-shopping-cart"></i> سبد خریـد</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!--/header-middle-->
+
+    <div class="header-bottom"><!--header-bottom-->
+        <div class="container">
+            <div class="row">
+
+                <div class="col-sm-3">
+                    <div class="search_box pull-left">
+                        <form {% if request.resolver_match.url_name != 'article_list_page' %}
+                            action="{% url 'product_list_page' %}"
+                        {% else %}
+                            action="{% url 'article_list_page' %}"
+                        {% endif %}  method="get">
+                            <input name="search" type="text" placeholder="جستـجو">
+                            <button type="submit" class="btn btn-success"><i class="fa fa-search"></i></button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="col-sm-9">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse"
+                                data-target=".navbar-collapse">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+                    <div class="mainmenu pull-right">
+                        <ul class="nav navbar-nav collapse navbar-collapse">
+                            {% if request.user.is_authenticated %}
+                                {% if request.user.is_superuser %}
+                                    <li><a href="/admin/"><i class="fa fa-adn">پنل ادمین</i></a></li>
+                                {% endif %}
+                            {% endif %}
+                            <li><a href="{% url 'home_page' %}" {% active_url 'home_page' %}>خـانه</a></li>
+
+                            <li><a {% active_url 'product_list_page' 'product_brand_page' 'product_detail_page' %} href="{% url 'product_list_page' %}">محصولات</a></li>
+                            <li>
+                                <a {% active_url 'article_list_page' 'article_detail_page' %} href="{% url 'article_list_page' %}">مقالات</a></li>
+                            <li>
+                                <a {% active_url 'contact_us_page' %}
+                                   href="{% url 'contact_us_page' %}">تماس با مـا</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div><!--/header-bottom-->
+</header><!--/header-->
+{% block body %}{% endblock %}
+
+
+<footer id="footer" class="margin_top"><!--Footer-->
+    <div class="footer-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="address">
+                        <img src="{% static 'images/home/map.png' %}" alt=""/>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="address">
+                        <img src="{% static 'images/home/map.png' %}" alt=""/>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="companyinfo">
+                        <h2><span>SHOP</span>CENTER</h2>
+                        <h4>درباره ما :</h4>
+                        <p>{{ site_setting.about_us }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-widget">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="single-widget">
+                        <h2>دسترسی سریع</h2>
+                        <ul class="nav nav-pills nav-stacked">
+                            <li><a href="{% url 'home_page' %}">خانه</a></li>
+                            <li><a href="{% url 'product_list_page' %}">محصولات</a></li>
+                            <li><a href="{% url 'article_list_page' %}">مقالات</a></li>
+                            <li><a href="{% url 'contact_us_page' %}">تماس با ما</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="single-widget">
+                        <h2>ما را دنبال کنید</h2>
+                    <h5>{{ site_setting.email }}</h5>
+                        <ul class="nav nav-pills nav-stacked">
+                        {% if site_setting.telegram_user_name %}
+                        	<li><a href="//t.me/{{ site_setting.telegram_user_name }}">تلگرام</a></li>
+                        {% endif %}
+                            {% if site_setting.github_user_name %}
+                            	<li><a href="//github.com/{{ site_setting.github_user_name }}"><i class="fa fa-github"></i></a></li>
+                            {% endif %}
+                        {% if site_setting.linkedin_user_name %}
+                        	<li><a href="//linkedin.com/{{ site_setting.linkedin_user_name }}"><i class="fa fa-linkedin"></i></a></li>
+                        {% endif %}
+
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-bottom" style="direction: ltr !important;">
+        <div class="container">
+            <div class="row">
+                <p class="text-center">تمامی حقوق محفوظ است 2026 @ توسعه و پیاده سازی بک اند توسط یوسف خرمیان</p>
+            </div>
+        </div>
+    </div>
+
+</footer><!--/Footer-->
+
+
+{% include 'include/js_refrences.html' %}
+</body>
+</html>

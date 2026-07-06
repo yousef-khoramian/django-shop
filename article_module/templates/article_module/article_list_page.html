@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load thumbnail %}
+
+
+{% block title %}
+    مقالات
+{% endblock %}
+
+
+{% block body %}
+
+    <section>
+        <div class="container">
+            <div class="row">
+
+                <div class="col-sm-9">
+                    <div class="blog-post-area">
+                        <h2 class="title text-center">آخریـن مقالات</h2>
+                        {% if object_list %}
+                            {% for article in article_list %}
+                                <div class="single-blog-post">
+                                    <h3>{{ article.title }}</h3>
+                                    <div class="post-meta">
+                                        <ul>
+                                            <li><i class="fa fa-user"></i>{{ article.user.username }}</li>
+                                            <li><i class="fa fa-clock-o"></i>{{ article.time }}</li>
+                                            <li><i class="fa fa-calendar"></i>{{ article.date }}</li>
+                                        </ul>
+                                        <span>
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star-half-o"></i>
+								</span>
+                                    </div>
+                                    <a href="{{ article.detail_url }}">
+                                        {% thumbnail article.image '862x398' crop='center' as im %}
+                                            <img src="{{ im.url }}">
+                                        {% endthumbnail %}
+                                    </a>
+                                    <p>{{ article.short_description }}</p>
+                                    <a class="btn btn-primary" href="{{ article.detail_url }}">ادامـه مطلب</a>
+                                </div>
+                            {% endfor %}
+
+                            <div class="pagination-area">
+                                <ul class="pagination">
+                                    {% if page_obj.has_previous %}
+                                        <li><a href="?page={{ page_obj.previous_page_number }}"><i
+                                                class="fa fa-angle-double-left"></i></a></li>
+                                    {% endif %}
+                                    {% for page_number in custom_range %}
+                                        <li><a href="?page={{ page_number }}"
+                                               {% if page_obj.number == page_number %}class="active"{% endif %}>{{ page_number }}</a>
+                                        </li>
+                                    {% endfor %}
+                                    {% if page_obj.has_next %}
+                                        <li><a href="?page={{ page_obj.next_page_number }}"><i
+                                                class="fa fa-angle-double-right"></i></a></li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        {% else %}
+                            <h3 id="else_product" class="alert alert-warning">مقاله ای یافت نشد</h3>
+                        {% endif %}
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

@@ -1,0 +1,50 @@
+{% load static %}
+<h2>پاسخ ها ({{ count }})</h2>
+<ul class="media-list">
+    {% for comment in comments %}
+        <li class="media">
+
+            <a class="pull-right" href="#">
+                {% if comment.user.avatar %}
+                    <img id="border_avatar" class="media-object pull-right"
+                         src="{{ comment.user.avatar.url }}" alt="">
+                {% else %}
+                    <img id="border_avatar" class="media-object pull-right" src="{% static 'images/cart/one.png' %}"
+                         alt="">
+                {% endif %}
+
+            </a>
+            <div class="media-body">
+                <ul class="sinlge-post-meta">
+                    <li><i class="fa fa-user"></i>{{ comment.user.username }}</li>
+                    <li><i class="fa fa-clock-o"></i>{{ comment.time }}</li>
+                    <li><i class="fa fa-calendar"></i>{{ comment.date }}</li>
+                </ul>
+                <p>{{ comment.message }}</p>
+                <a class="btn btn-primary" onclick="Parent({{ comment.id }})"><i class="fa fa-reply"></i>پاسـخ</a>
+                <input type="hidden" id="parent">
+            </div>
+        </li>
+        {% for reply_comment in comment.articlecomment_set.all %}
+            <li class="media second-media">
+                {% if reply_comment.user.avatar %}
+                    <img id="border_avatar" class="media-object pull-right"
+                         src="{{ reply_comment.user.avatar.url }}" alt="">
+                {% else %}
+                     <img id="border_avatar" class="media-object pull-right" src="{% static 'images/cart/one.png' %}"
+                                                 alt="">
+                {% endif %}
+                <div class="media-body">
+                    <ul class="sinlge-post-meta">
+                        <li><i class="fa fa-user"></i>{{ reply_comment.user.username }}</li>
+                        <li><i class="fa fa-clock-o"></i>{{ reply_comment.time }}</li>
+                        <li><i class="fa fa-calendar"></i>{{ reply_comment.date }}</li>
+                    </ul>
+                    <p>{{ reply_comment.message }}</p>
+                </div>
+            </li>
+        {% endfor %}
+    {% endfor %}
+
+
+</ul>
